@@ -12,6 +12,8 @@ AgenticX-AiSMS 是一个基于企业级多智能体框架（AgenticX）和开源
 
 ## 核心技术架构：三通道统一与 AI 编排
 
+![三通道统一技术架构图](research/images/architecture_three_channel.png)
+
 本平台的技术架构分为三层：
 
 ### 1. 触达通道层（三通道联动）
@@ -31,6 +33,8 @@ AgenticX-AiSMS 是一个基于企业级多智能体框架（AgenticX）和开源
 ---
 
 ## 六大核心应用场景
+
+![六大核心应用场景图](research/images/six_core_scenarios.png)
 
 基于上述架构，AgenticX-AiSMS 可实现以下六大自动化场景：
 
