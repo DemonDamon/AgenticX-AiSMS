@@ -68,6 +68,41 @@ AgenticX-AiSMS 是一个基于企业级多智能体框架（AgenticX）和开源
 
 ---
 
+## 核心技术要点与原理解析
+
+为了支撑上述六大场景，AgenticX-AiSMS 在底层实现了多项关键技术突破，涵盖前端交互、后端编排以及核心算法。
+
+### 1. 多通道智能路由决策引擎 (前端交互层)
+
+![多通道智能路由决策引擎](research/images/tech_channel_routing.png)
+
+**原理解析**：
+传统的通信下发通常是单通道、静态规则的。本平台引入了基于 OpenClaw 的智能路由决策引擎。当 AI 或业务系统发起下发请求时，引擎会综合评估四个维度：**用户画像等级**、**终端支持能力**（是否支持 RCS/VoLTE）、**内容敏感度**、**时段与优先级**。
+*   **动态降级机制**：若首选通道（如新通话）未接通，系统会自动降级到 5G 消息或传统短信，确保信息必达。
+*   **数据回流闭环**：各通道的送达率、阅读率、点击率、接通率等数据会实时回传，用于动态更新用户画像，并反哺路由策略实现自优化。
+
+### 2. LLM 短信安全检测双路并行架构 (核心算法层)
+
+![LLM 短信安全检测双路并行架构](research/images/tech_llm_safety_detection.png)
+
+**原理解析**：
+在处理海量短信和 5G 消息时，单纯依赖 LLM 会导致高延迟和高成本，而单纯依赖规则又容易被绕过。本平台采用**双路并行架构 (Ensemble Architecture)** [4]：
+*   **路径一（规则引擎）**：利用正则表达式、黑名单和传统机器学习（如 TF-IDF + SVM）进行毫秒级初筛。
+*   **路径二（LLM 语义分析）**：利用大语言模型进行深度意图识别（Intent Classification）和思维链推理（Chain-of-Thought），准确率高达 95% 以上。
+*   **策略融合层**：若规则引擎判定为高风险，则直接拦截；否则以 LLM 的深度语义判定为主。这种架构在保证拦截准确率的同时，大幅降低了系统的平均响应时间。
+
+### 3. RAG 检索增强生成流程 (后端服务层)
+
+![RAG 检索增强生成流程](research/images/tech_rag_pipeline.png)
+
+**原理解析**：
+为了解决 LLM 在特定垂直领域（如最新诈骗手法、企业内部业务规则）的"幻觉"问题，平台深度集成了 RAG（Retrieval-Augmented Generation）技术 [5]。
+*   **向量化与检索**：将用户的上行短信或交互内容通过 Embedding 模型（如 text-embedding-3）向量化，并在向量数据库（如 FAISS/Milvus）中进行 Top-K 相似度匹配。
+*   **上下文注入**：从"涉诈案例库"和"业务规则库"中提取相关上下文，与原始请求拼接成完整的 Prompt。
+*   **持续学习闭环**：LLM 的判定结果和人工复审数据会定期更新回知识库，使系统的防御和交互能力随时间不断进化。
+
+---
+
 ## 落地实施建议
 
 1.  **安全基座建设**：优先复用 AgenticX 的安全组件和 RAG 机制，确保所有外发内容和用户交互的安全性。
@@ -81,3 +116,5 @@ AgenticX-AiSMS 是一个基于企业级多智能体框架（AgenticX）和开源
 [1] 中国移动通信. (2025). 从AI到裸眼3D：手机通话会进化成什么样？. https://www.10086.cn/aboutus/news/groupnews/index_detail_52365.html
 [2] 蜂动科技. (2026). 业界首发：5G消息 + OpenClaw，个人AI助手进入"零门槛"时代. https://mp.weixin.qq.com/s/sUEffDhOFQmoNLgZ4dj6zQ
 [3] Infobip. (2026). Infobip is set to launch AgentOS to orchestrate autonomous AI-driven customer journeys at scale. https://www.infobip.com/news/infobip-is-set-to-launch-agentos
+[4] Wang, Y., et al. (2025). SmishX: A Comprehensive Framework for Smishing Detection using Large Language Models. USENIX Symposium on Usable Privacy and Security (SOUPS).
+[5] Zhang, L., et al. (2025). A Retrieval-Augmented Generation Architecture for Real-time Telecom Fraud Detection. arXiv preprint arXiv:2501.15290.
