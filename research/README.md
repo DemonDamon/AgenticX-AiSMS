@@ -21,6 +21,10 @@
 
 ### 2. 头部厂商解决方案 (Industry Solutions)
 
+- [蜂动科技：5G 消息 + OpenClaw 融合方案](./raw_vendor_fontdo_openclaw_5g_rcs.md)
+  - **核心技术**：业界首发将 5G 消息（RCS）作为 OpenClaw（开源 AI Agent 框架）的触达通道，实现"零门槛"的个人 AI 助手。
+  - **核心价值**：展示了短信平台与 AI Agent 打通的巨大潜力，不仅限于安全防御，更可扩展至主动营销、富媒体交互、动态用户画像生成及 CRM 系统对接。
+
 - [Google AI 短信诈骗检测技术方案](./raw_vendor_google_scam_detection.md)
   - **核心技术**：基于 Gemini Nano 的端侧（On-Device）实时检测，强调隐私保护和对话式诈骗（Conversational Scams）的动态演变识别。
 - [Meta Llama Guard 3 内容安全分类器](./raw_vendor_meta_llama_guard3.md)
